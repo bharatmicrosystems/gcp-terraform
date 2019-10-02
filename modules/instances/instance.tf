@@ -10,7 +10,6 @@ resource "google_compute_instance" "main" {
   }
 
   network_interface {
-    network = "${var.vpc_name}"
     subnetwork = "${var.subnet_name}"
   }
 }

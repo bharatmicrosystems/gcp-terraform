@@ -4,5 +4,4 @@ variable "instance_machine_type" {
 }
 variable "instance_zone" {}
 variable "instance_image" {}
-variable "vpc_name" {}
 variable "subnet_name" {}
