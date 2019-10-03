@@ -36,3 +36,10 @@ variable "update_strategy" {}
 variable "target_size" {}
 variable "initial_delay_sec" {}
 variable "instance_template_region" {}
+
+variable "kube_name" {}
+variable "kube_location" {}
+variable "kube_subnetwork" {}
+variable "kube_node_pool_name" {}
+variable "kube_node_count" {}
+variable "kube_preemptible" {}
