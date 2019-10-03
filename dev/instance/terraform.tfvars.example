@@ -1,0 +1,7 @@
+instance_name = "my-instance"
+instance_machine_type = "f1-micro"
+instance_zone = "us-central1-a"
+instance_image = "debian-cloud/debian-9"
+project     = "xxxxxxxxxxxxxxxx"
+region      = "us-central1"
+subnet_name = "subnet1"

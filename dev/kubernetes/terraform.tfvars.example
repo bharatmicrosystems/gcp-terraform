@@ -1,0 +1,9 @@
+vpc_name = "myvpc"
+kube_name = "my-kube-cluster"
+kube_location = "us-central1"
+kube_subnetwork = "subnet1"
+kube_node_pool_name = "node-pool1"
+kube_node_count = 1
+kube_preemptible = true
+project     = "xxxxxxxxxxxxxxxx"
+region      = "us-central1"
