@@ -20,7 +20,7 @@ module "kube-worker-1" {
   instance_image = "ubuntu-1804-bionic-v20191021"
   subnet_name = "default"
   external_enabled = "true"
-  startup_script = "sudo apt-get update; sudo apt-get install -y wget; wget https://raw.githubusercontent.com/bharatmicrosystems/gcp-terraform/master/dev/woker.sh; sh worker.sh"
+  startup_script = "sudo apt-get update; sudo apt-get install -y wget; wget https://raw.githubusercontent.com/bharatmicrosystems/gcp-terraform/master/dev/worker.sh; sh worker.sh > worker.log"
 }
 
 module "kube-worker-2" {
@@ -31,5 +31,5 @@ module "kube-worker-2" {
   instance_image = "ubuntu-1804-bionic-v20191021"
   subnet_name = "default"
   external_enabled = "true"
-  startup_script = "sudo apt-get update; sudo apt-get install -y wget; wget https://raw.githubusercontent.com/bharatmicrosystems/gcp-terraform/master/dev/worker.sh; sh worker.sh"
+  startup_script = "sudo apt-get update; sudo apt-get install -y wget; wget https://raw.githubusercontent.com/bharatmicrosystems/gcp-terraform/master/dev/worker.sh; sh worker.sh > worker.log"
 }

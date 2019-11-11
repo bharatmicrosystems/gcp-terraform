@@ -22,3 +22,10 @@ sudo apt-get update
 sudo apt-get install -y kubelet=1.12.7-00 kubeadm=1.12.7-00 kubectl=1.12.7-00
 
 sudo apt-mark hold kubelet kubeadm kubectl
+
+sleep 60
+
+gsutil cp gs://file-store-playground-s-11-532583/master.log master.log
+echo 'sudo' $(cat master.log|grep "kubeadm join") '--ignore-preflight-errors all' > output.sh
+sh output.sh
+kubectl get nodes
