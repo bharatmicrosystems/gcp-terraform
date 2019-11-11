@@ -11,5 +11,7 @@ resource "google_compute_instance" "main" {
 
   network_interface {
     subnetwork = "${var.subnet_name}"
+    access_config {
+    }
   }
 }

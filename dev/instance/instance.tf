@@ -5,4 +5,5 @@ module "my-instance" {
   instance_zone = "${var.instance_zone}"
   instance_image = "${var.instance_image}"
   subnet_name = "${var.subnet_name}"
+  external_enabled = "${var.external_enabled}"
 }
