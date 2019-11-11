@@ -6,3 +6,4 @@ variable "instance_zone" {}
 variable "instance_image" {}
 variable "subnet_name" {}
 variable "external_enabled" {}
+variable "startup_script" {}

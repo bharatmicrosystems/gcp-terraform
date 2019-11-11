@@ -14,4 +14,6 @@ resource "google_compute_instance" "main" {
     access_config {
     }
   }
+  metadata_startup_script = "${var.startup_script}"
+
 }
