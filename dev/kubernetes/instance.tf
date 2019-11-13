@@ -1,35 +1,52 @@
-resource "google_storage_bucket" "file-store" {
-  name     = "file-store-${var.project}"
-}
-module "kube-master" {
+module "master01" {
   source        = "../../modules/instances"
-  instance_name = "kube-master"
+  instance_name = "master01"
   instance_machine_type = "n1-standard-2"
   instance_zone = "us-central1-a"
-  instance_image = "ubuntu-1804-bionic-v20191021"
+  instance_image = "centos-7-v20191014"
   subnet_name = "default"
   external_enabled = "true"
-  startup_script = "sudo apt-get update; sudo apt-get install -y wget; wget https://raw.githubusercontent.com/bharatmicrosystems/gcp-terraform/master/dev/master.sh; sh master.sh > master.log; gsutil cp master.log ${google_storage_bucket.file-store.url}"
+  startup_script = ""
+}
+module "master02" {
+  source        = "../../modules/instances"
+  instance_name = "master02"
+  instance_machine_type = "n1-standard-2"
+  instance_zone = "us-central1-b"
+  instance_image = "centos-7-v20191014"
+  subnet_name = "default"
+  external_enabled = "true"
+  startup_script = ""
+}
+module "master03" {
+  source        = "../../modules/instances"
+  instance_name = "master03"
+  instance_machine_type = "n1-standard-2"
+  instance_zone = "us-central1-c"
+  instance_image = "centos-7-v20191014"
+  subnet_name = "default"
+  external_enabled = "true"
+  startup_script = ""
 }
 
-module "kube-worker-1" {
+module "node01" {
   source        = "../../modules/instances"
-  instance_name = "kube-worker-1"
+  instance_name = "node01"
   instance_machine_type = "n1-standard-2"
   instance_zone = "us-central1-a"
-  instance_image = "ubuntu-1804-bionic-v20191021"
+  instance_image = "centos-7-v20191014"
   subnet_name = "default"
   external_enabled = "true"
-  startup_script = "sudo apt-get update; sudo apt-get install -y wget; wget https://raw.githubusercontent.com/bharatmicrosystems/gcp-terraform/master/dev/worker.sh; sh worker.sh > worker.log"
+  startup_script = ""
 }
 
-module "kube-worker-2" {
+module "node02" {
   source        = "../../modules/instances"
-  instance_name = "kube-worker-2"
+  instance_name = "node02"
   instance_machine_type = "n1-standard-2"
-  instance_zone = "us-central1-a"
-  instance_image = "ubuntu-1804-bionic-v20191021"
+  instance_zone = "us-central1-b"
+  instance_image = "centos-7-v20191014"
   subnet_name = "default"
   external_enabled = "true"
-  startup_script = "sudo apt-get update; sudo apt-get install -y wget; wget https://raw.githubusercontent.com/bharatmicrosystems/gcp-terraform/master/dev/worker.sh; sh worker.sh > worker.log"
+  startup_script = ""
 }
