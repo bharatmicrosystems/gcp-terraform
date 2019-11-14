@@ -1,7 +1,8 @@
+# https://www.kubeclusters.com/docs/How-to-Deploy-a-Highly-Available-kubernetes-Cluster-with-Kubeadm-on-CentOS7
 LOAD_BALANCER_IP=$1
 kubetoken=$2
 kubecacertshash=$3
-sudo su - root
+kubecertkey=$4
 cat <<EOF > /etc/yum.repos.d/centos.repo
 [centos]
 name=CentOS-7
@@ -31,9 +32,7 @@ repo_gpgcheck=1
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
 setenforce 0
-vi /etc/selinux/config
-     SELINUX=permissive ##Change if it is enforceing
-
+sed -i 's/enforcing/permissive/g' /etc/selinux/config
 yum -y install kubelet kubeadm kubectl
 systemctl start kubelet
 systemctl enable kubelet
@@ -48,4 +47,7 @@ cat <<EOF >> /etc/hosts
 masterlb_ip masterlb
 EOF
 sed -i "s/masterlb_ip/${LOAD_BALANCER_IP}/g" /etc/hosts
-kubeadm join masterlb:6443 --token ${kubetoken} --discovery-token-ca-cert-hash ${kubecacertshash}
+kubeadm join masterlb:6443 --token ${kubetoken} --discovery-token-ca-cert-hash ${kubecacertshash} --control-plane --certificate-key ${kubecertkey}
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config

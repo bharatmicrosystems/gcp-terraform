@@ -1,4 +1,5 @@
 # https://www.kubeclusters.com/docs/How-to-Deploy-a-Highly-Available-kubernetes-Cluster-with-Kubeadm-on-CentOS7
+LOAD_BALANCER_IP=$1
 cat <<EOF > /etc/yum.repos.d/centos.repo
 [centos]
 name=CentOS-7
@@ -39,3 +40,14 @@ net.bridge.bridge-nf-call-iptables = 1
 EOF
 sysctl --system
 echo 1 > /proc/sys/net/ipv4/ip_forward
+cat <<EOF >> /etc/hosts
+masterlb_ip masterlb
+EOF
+sed -i "s/masterlb_ip/${LOAD_BALANCER_IP}/g" /etc/hosts
+kubeadm init --control-plane-endpoint "masterlb:${LOAD_BALANCER_PORT}" --upload-certs --pod-network-cidr=10.244.0.0/16
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+export kubever=$(kubectl version | base64 | tr -d '\n')
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"
+kubectl get nodes
