@@ -12,7 +12,7 @@ baseurl=http://ftp.heanet.ie/pub/centos/7/extras/x86_64/
 enabled=1
 gpgcheck=0
 EOF
-yum -y update 
+yum -y update
 yum -y install docker
 systemctl enable docker
 systemctl start docker

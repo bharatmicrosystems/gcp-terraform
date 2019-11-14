@@ -1,6 +1,7 @@
 ip_master_01=$1
 ip_master_02=$2
 ip_master_03=$3
+vip=$4
 mkdir -p /etc/etcd/ssl
 mkdir -p /var/lib/etcd
 gsutil cp -r gs://staging-1144/ssl/*.pem /etc/etcd/ssl/
@@ -44,3 +45,78 @@ sed -i "s/ph_ip_master_01/${ip_master_01}/g" /etc/systemd/system/etcd.service
 sed -i "s/ph_ip_master_02/${ip_master_02}/g" /etc/systemd/system/etcd.service
 sed -i "s/ph_ip_master_03/${ip_master_03}/g" /etc/systemd/system/etcd.service
 systemctl daemon-reload && systemctl enable etcd && systemctl start etcd
+yum install keepalived -y
+cat <<EOF >  /etc/keepalived/keepalived.conf
+global_defs {
+   router_id LVS_k8s
+}
+vrrp_script CheckK8sMaster {
+    script "curl -k https://ph_ip_master_03:6443"
+    interval 3
+    timeout 9
+    fall 2
+    rise 2
+}
+vrrp_instance VI_1 {
+    state BACKUP
+    interface eth0
+    virtual_router_id 61
+    priority 80
+    advert_int 1
+    mcast_src_ip ph_ip_master_03
+    nopreempt
+    authentication {
+          auth_type PASS
+        auth_pass KEEPALIVED_AUTH_PASS
+    }
+    unicast_peer {
+        ph_ip_master_01
+        ph_ip_master_02
+    }
+    virtual_ipaddress {
+        ph_vip
+    }
+    track_script {
+        CheckK8sMaster
+    }
+}
+EOF
+sed -i "s/ph_ip_master_01/${ip_master_01}/g" /etc/keepalived/keepalived.conf
+sed -i "s/ph_ip_master_02/${ip_master_02}/g" /etc/keepalived/keepalived.conf
+sed -i "s/ph_ip_master_03/${ip_master_03}/g" /etc/keepalived/keepalived.conf
+sed -i "s/ph_vip/${vip}/g" /etc/keepalived/keepalived.conf
+systemctl daemon-reload && systemctl enable keepalived && systemctl restart keepalived
+gsutil cp -r gs://staging-1144/pki /etc/kubernetes/
+cat <<EOF >  kubeadm-config.yaml
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: InitConfiguration
+localAPIEndpoint:
+  advertiseAddress: ph_ip_master_03
+---
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+etcd:
+  external:
+    endpoints:
+    - https://ph_ip_master_01:2379
+    - https://ph_ip_master_02:2379
+    - https://ph_ip_master_03:2379
+    caFile: /etc/etcd/ssl/ca.pem
+    certFile: /etc/etcd/ssl/etcd.pem
+    keyFile: /etc/etcd/ssl/etcd-key.pem
+networking:
+  podSubnet: 10.244.0.0/16
+apiServer:
+  certSANs:
+  - ph_ip_master_01
+  - ph_ip_master_02
+  - ph_ip_master_03
+  - ph_vip
+  extraArgs:
+    endpoint-reconciler-type: lease
+EOF
+sed -i "s/ph_ip_master_01/${ip_master_01}/g" kubeadm-config.yaml
+sed -i "s/ph_ip_master_02/${ip_master_02}/g" kubeadm-config.yaml
+sed -i "s/ph_ip_master_03/${ip_master_03}/g" kubeadm-config.yaml
+sed -i "s/ph_vip/${vip}/g" kubeadm-config.yaml
+kubeadm init --config kubeadm-config.yaml
