@@ -45,11 +45,11 @@ module "node01" {
   startup_script = ""
 }
 
-module "node02" {
+module "nginxlb" {
   source        = "../../modules/instances"
-  instance_name = "node02"
+  instance_name = "nginxlb"
   instance_machine_type = "n1-standard-2"
-  instance_zone = "us-central1-b"
+  instance_zone = "us-central1-a"
   instance_image = "centos-7-v20191014"
   subnet_name = "default"
   external_enabled = "true"
