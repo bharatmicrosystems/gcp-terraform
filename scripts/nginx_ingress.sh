@@ -12,15 +12,3 @@ kubectl apply -f common/nginx-config.yaml
 kubectl apply -f rbac/rbac.yaml
 kubectl apply -f daemon-set/nginx-ingress.yaml
 kubectl get pods --namespace=nginx-ingress -o wide
-curl http://10.44.0.1
-curl http://10.36.0.1
-curl https://10.36.0.1 --insecure
-#Testing the ingress controller
-IC_IP=10.36.0.1
-IC_HTTPS_PORT=443
-cd ../examples/complete-example/
-kubectl create -f cafe.yaml
-kubectl create -f cafe-secret.yaml
-kubectl create -f cafe-ingress.yaml
-kubectl get all
-curl --resolve cafe.example.com:$IC_HTTPS_PORT:$IC_IP https://cafe.example.com:$IC_HTTPS_PORT/coffee --insecure

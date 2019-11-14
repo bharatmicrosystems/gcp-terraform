@@ -1,8 +1,3 @@
-resource "google_storage_bucket" "staging-store" {
-  name     = "staging_${var.project}"
-  location = "US"
-  force_destroy = true
-}
 module "master01" {
   source        = "../../modules/instances"
   instance_name = "master01"

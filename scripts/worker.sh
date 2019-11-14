@@ -1,7 +1,6 @@
 LOAD_BALANCER_IP=$1
 kubetoken=$2
 kubecacertshash=$3
-sudo su - root
 cat <<EOF > /etc/yum.repos.d/centos.repo
 [centos]
 name=CentOS-7
@@ -31,9 +30,8 @@ repo_gpgcheck=1
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
 setenforce 0
-vi /etc/selinux/config
-     SELINUX=permissive ##Change if it is enforceing
-
+setenforce 0
+sed -i 's/enforcing/permissive/g' /etc/selinux/config
 yum -y install kubelet kubeadm kubectl
 systemctl start kubelet
 systemctl enable kubelet

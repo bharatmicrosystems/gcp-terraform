@@ -3,6 +3,10 @@ LOAD_BALANCER_IP=$1
 kubetoken=$2
 kubecacertshash=$3
 kubecertkey=$4
+if [ "$#" -ne 4 ]; then
+  echo "Usage: $0 LOAD_BALANCER_IP kubetoken kubecacertshash kubecertkey" >&2
+  exit 1
+fi
 cat <<EOF > /etc/yum.repos.d/centos.repo
 [centos]
 name=CentOS-7
