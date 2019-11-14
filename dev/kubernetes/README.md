@@ -49,13 +49,38 @@ git clone https://github.com/bharatmicrosystems/gcp-terraform.git
 cd gcp-terraform/scripts
 sh -x master_leader.sh <LOAD_BALANCER_IP>
 ```
+If everything is ok you would get a message like below
+```
+You can now join any number of the control-plane node running the following command on each as root:
+
+  kubeadm join masterlb:6443 --token hwe4u6.hy79bfq4uq3myhsn \
+    --discovery-token-ca-cert-hash sha256:7b437ae3463c1236e29f30dc9c222f65f818d304f8b410b598451478240f105a \
+    --control-plane --certificate-key b38664ca2d82e7e4969a107b45d2be83767606331590d7b487eaad1ddbe8cd26
+
+Please note that the certificate-key gives access to cluster sensitive data, keep it secret!
+As a safeguard, uploaded-certs will be deleted in two hours; If necessary, you can use
+"kubeadm init phase upload-certs --upload-certs" to reload certs afterward.
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join masterlb:6443 --token hwe4u6.hy79bfq4uq3myhsn \
+    --discovery-token-ca-cert-hash sha256:7b437ae3463c1236e29f30dc9c222f65f818d304f8b410b598451478240f105a
+```
+Copy this in the notepad as we will use it later on
+
 ssh into the master02 node
+We would now attempt to join the master02 node as an additional control plane. Refer to the section below from the text you copied to notepad and make a note of --token,  --discovery-token-ca-cert-hash and --certificate-key values as we would be using them in the commands that follow
+```
+kubeadm join masterlb:6443 --token hwe4u6.hy79bfq4uq3myhsn \
+  --discovery-token-ca-cert-hash sha256:7b437ae3463c1236e29f30dc9c222f65f818d304f8b410b598451478240f105a \
+  --control-plane --certificate-key b38664ca2d82e7e4969a107b45d2be83767606331590d7b487eaad1ddbe8cd26
+```
 ```
 sudo su -
 yum install -y git
 git clone https://github.com/bharatmicrosystems/gcp-terraform.git
 cd gcp-terraform/scripts
-sh -x master_followers.sh <LOAD_BALANCER_IP> <kubetoken> <kubecacertshash> <kubecertkey>
+sh -x master_followers.sh <LOAD_BALANCER_IP> <kubetoken> <discovery-token-ca-cert-hash> <certificate-key>
 ```
 ssh into the master03 node
 ```
@@ -71,5 +96,20 @@ sudo su -
 yum install -y git
 git clone https://github.com/bharatmicrosystems/gcp-terraform.git
 cd gcp-terraform/scripts
-sh -x master_followers.sh <LOAD_BALANCER_IP> <kubetoken> <kubecacertshash>
+sh -x worker.sh <LOAD_BALANCER_IP> <kubetoken> <kubecacertshash>
+```
+## Setup Nginx Ingress Controller on the cluster
+An Nginx Ingress controller would help us route and manage traffic within the kubernetes cluster and would be a means to expose your workloads externally using Ingress service.
+
+On the master01 node
+```
+sh -x nginx-ingress.sh
+```
+Test the ingress Setup
+```
+sh -x nginx-test.sh <LOAD_BALANCER_IP>
+```
+You should get an HTTP 200 reply like the below
+```
+
 ```
