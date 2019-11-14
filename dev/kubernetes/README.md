@@ -6,8 +6,42 @@ Specifications
 
 3 master nodes master01 master02 master03 on 3 DCs for HA
 
-1 worker node node01 on one DC. You may need to add multiple nodes in that case just follow the same steps as the one worker node and the setup should work fine.
+1 worker node node01 on one DC. You may need to add multiple nodes in that case just follow the steps as mentioned.
 
+1 nginx load balancer to load balance the master api servers and also the nginx ingress controllers running on worker nodes
+
+If you choose to use the terraform templates for creating the environment on google cloud platform follow the steps below. If you are running on-premise you would need to provision the infrastructure yourself.
+
+Ensure that all nodes can talk to each other on the internal ip on all ports.
+```
+cd dev/kubernetes
+cp terraform.tfvars.example terraform.tfvars
+```
+Edit instance.tf to add more worker nodes/modify configuration if necessary
+Edit terraform.tfvars to add your custom configuration
+
+Initialize, Validate and Plan your configuration
+```
+terraform init
+terraform plan
+terraform validate
+```
+
+To create the terraform objects
+```
+terraform apply
+```
+Note the internal ips of all the nodes and substitute in the placeholders specified
+
+## Setup Load Balancer
+
+ssh into the masterlb node
+```
+sudo su -
+yum install -y git
+git clone https://github.com/bharatmicrosystems/gcp-terraform.git
+cd gcp-terraform/scripts
+```
 If you are setting up more than one worker node, ensure that you edit the nginx.conf file and add additional worker nodes in the load balancer configuration as suggested in the file in the below section. You can start by uncommenting ip_node_02 and ip_node_03 and adding further nodes here
 ```
 upstream stream_node_backend_80 {
@@ -32,38 +66,8 @@ sed -i "s/ip_node_01/${ip_node_01}/g" /etc/nginx/nginx.conf
 #sed -i "s/ip_node_03/${ip_node_03}/g" /etc/nginx/nginx.conf
 # ...
 ```
-
-1 nginx load balancer to load balance the master api servers and also the nginx ingress controllers running on worker nodes
-
-If you choose to use the terraform templates for creating the environment on google cloud platform follow the steps below. If you are running on-premise you would need to provision the infrastructure yourself.
-
-Ensure that all nodes can talk to each other on the internal ip on all ports.
+Once you have modified everything run the following
 ```
-cd dev/kubernetes
-cp terraform.tfvars.example terraform.tfvars
-```
-Edit terraform.tfvars to add your custom configuration
-
-Initialize, Validate and Plan your configuration
-```
-terraform init
-terraform plan
-terraform validate
-```
-
-To create the terraform objects
-```
-terraform apply
-```
-Note the internal ips of all the nodes and substitute in the placeholders specified
-
-## Setup Load Balancer
-ssh into the masterlb node
-```
-sudo su -
-yum install -y git
-git clone https://github.com/bharatmicrosystems/gcp-terraform.git
-cd gcp-terraform/scripts
 sh -x loadbalancer.sh <ip_master_01> <ip_master_02> <ip_master_03> <ip_node_01>
 ```
 ## Setup Kubernetes
@@ -116,7 +120,7 @@ git clone https://github.com/bharatmicrosystems/gcp-terraform.git
 cd gcp-terraform/scripts
 sh -x master_followers.sh <LOAD_BALANCER_IP> <kubetoken> <discovery-token-ca-cert-hash> <certificate-key>
 ```
-ssh into the node01 node
+ssh into the worker nodes and execute the following
 ```
 sudo su -
 yum install -y git
