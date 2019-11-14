@@ -7,7 +7,7 @@ if [ "$#" -ne 4 ]; then
   echo "Usage: $0 ip_master_01 ip_master_02 ip_master_03 ip_node_01" >&2
   exit 1
 fi
-yum install -y telnet ngnix
+yum install -y telnet nginx
 cp nginx.conf /etc/nginx/nginx.conf
 sed -i "s/ip_master_01/${ip_master_01}/g" /etc/nginx/nginx.conf
 sed -i "s/ip_master_02/${ip_master_02}/g" /etc/nginx/nginx.conf
