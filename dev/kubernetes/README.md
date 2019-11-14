@@ -69,13 +69,13 @@ kubeadm join masterlb:6443 --token hwe4u6.hy79bfq4uq3myhsn \
 ```
 Copy this in the notepad as we will use it later on
 
-ssh into the master02 node
 We would now attempt to join the master02 node as an additional control plane. Refer to the section below from the text you copied to notepad and make a note of --token,  --discovery-token-ca-cert-hash and --certificate-key values as we would be using them in the commands that follow
 ```
 kubeadm join masterlb:6443 --token hwe4u6.hy79bfq4uq3myhsn \
   --discovery-token-ca-cert-hash sha256:7b437ae3463c1236e29f30dc9c222f65f818d304f8b410b598451478240f105a \
   --control-plane --certificate-key b38664ca2d82e7e4969a107b45d2be83767606331590d7b487eaad1ddbe8cd26
 ```
+ssh into the master02 node
 ```
 sudo su -
 yum install -y git
@@ -89,7 +89,7 @@ sudo su -
 yum install -y git
 git clone https://github.com/bharatmicrosystems/gcp-terraform.git
 cd gcp-terraform/scripts
-sh -x master_followers.sh <LOAD_BALANCER_IP> <kubetoken> <kubecacertshash> <kubecertkey>
+sh -x master_followers.sh <LOAD_BALANCER_IP> <kubetoken> <discovery-token-ca-cert-hash> <certificate-key>
 ```
 ssh into the node01 node
 ```
@@ -97,7 +97,7 @@ sudo su -
 yum install -y git
 git clone https://github.com/bharatmicrosystems/gcp-terraform.git
 cd gcp-terraform/scripts
-sh -x worker.sh <LOAD_BALANCER_IP> <kubetoken> <kubecacertshash>
+sh -x worker.sh <LOAD_BALANCER_IP> <kubetoken> <discovery-token-ca-cert-hash>
 ```
 ## Setup Nginx Ingress Controller on the cluster
 An Nginx Ingress controller would help us route and manage traffic within the kubernetes cluster and would be a means to expose your workloads externally using Ingress service.
@@ -110,7 +110,7 @@ Test the ingress Setup
 ```
 sh -x ingress_test.sh <LOAD_BALANCER_IP>
 ```
-You should get an HTTP 200 reply like the below
+You should get an output like the below
 ```
 + curl --resolve cafe.example.com:443:10.128.0.4 https://cafe.example.com:443/coffee --insecure
 Server address: 10.42.0.2:80
@@ -122,8 +122,7 @@ Request ID: d0b48224a13c5f9d822e5421306032e9
 Congratulations! You are all setup!
 
 ## Cleaning up
-On your terraform workspace run
-To destroy the terraform objects
+You might want to destroy the objects at the end especially if you are learning and have the infrastructure temporarily setup. To destroy the terraform objects on your terraform workspace run
 ```
 terraform destroy
 ```
