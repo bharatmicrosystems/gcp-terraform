@@ -1,3 +1,4 @@
+# https://www.kubeclusters.com/docs/How-to-Deploy-a-Highly-Available-kubernetes-Cluster-with-Kubeadm-on-CentOS7
 cat <<EOF > /etc/yum.repos.d/centos.repo
 [centos]
 name=CentOS-7
