@@ -1,11 +1,6 @@
 resource "google_storage_bucket" "staging-store" {
   name     = "staging_${var.project}"
-  location = "EU"
-
-  website {
-    main_page_suffix = "index.html"
-    not_found_page   = "404.html"
-  }
+  location = "US"
 }
 module "master01" {
   source        = "../../modules/instances"
