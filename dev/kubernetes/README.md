@@ -1,5 +1,5 @@
 # Setting up a multi-master Highly Available Kubernetes Cluster
-This repository contains terraform templates which would spin up infrastructure required for having a multi master kubernetes cluster.
+This repository contains terraform templates which would spin up infrastructure required for having a multi master kubernetes cluster and scripts needed to setup the cluster. If you are running on-premise you can skip the terraform part and use the scripts to setup the cluster in your environment.
 
 ## Setup the infrastructure
 
