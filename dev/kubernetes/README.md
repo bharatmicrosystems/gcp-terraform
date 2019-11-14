@@ -1,13 +1,19 @@
-# kubernetes
-## Setting up a multi-master highly available kubernetes Cluster
-This repository contains terraform templates which would spin up infrastucte required for having a multi master kubernetes cluster.
+# Setting up a multi-master Highly Available Kubernetes Cluster
+This repository contains terraform templates which would spin up infrastructure required for having a multi master kubernetes cluster.
 
-## Setup the infrastucture
+## Setup the infrastructure
+
+
 Specifications
-3 master nodes master01 master02 master_03 on 3 zones of us-central1 region
-1 worker node node01 on 1 zone of us-central1 region
+3 master nodes master01 master02 master03 on 3 DCs for HA
+
+1 worker node node01 on one DC. You may need to add multiple nodes in that case just follow the same steps as the one worker node and the setup should work fine.
+
 1 nginx load balancer to load balance the master api servers and also the nginx ingress controllers running on worker nodes
 
+If you choose to use the terraform templates for creating the environment on google cloud platform follow the steps below. If you are running on-premise you would need to provision the infrastructure yourself.
+
+Ensure that all nodes can talk to each other on the internal ip on all ports.
 ```
 cd dev/kubernetes
 cp terraform.tfvars.example terraform.tfvars
@@ -24,10 +30,6 @@ terraform validate
 To create the terraform objects
 ```
 terraform apply
-```
-To destroy the terraform objects
-```
-terraform destroy
 ```
 Note the internal ips of all the nodes and substitute in the placeholders specified
 
@@ -103,13 +105,26 @@ An Nginx Ingress controller would help us route and manage traffic within the ku
 
 On the master01 node
 ```
-sh -x nginx-ingress.sh
+sh -x nginx_ingress.sh
 ```
 Test the ingress Setup
 ```
-sh -x nginx-test.sh <LOAD_BALANCER_IP>
+sh -x ingress_test.sh <LOAD_BALANCER_IP>
 ```
 You should get an HTTP 200 reply like the below
 ```
++ curl --resolve cafe.example.com:443:10.128.0.4 https://cafe.example.com:443/coffee --insecure
+Server address: 10.42.0.2:80
+Server name: coffee-8c8ff9b4f-vrvnr
+Date: 14/Nov/2019:15:43:28 +0000
+URI: /coffee
+Request ID: d0b48224a13c5f9d822e5421306032e9
+```
+Congratulations! You are all setup!
 
+## Cleaning up
+On your terraform workspace run
+To destroy the terraform objects
+```
+terraform destroy
 ```
