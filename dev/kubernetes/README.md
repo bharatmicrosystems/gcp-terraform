@@ -68,7 +68,7 @@ sed -i "s/ip_node_01/${ip_node_01}/g" /etc/nginx/nginx.conf
 ```
 Once you have modified everything run the following
 ```
-sh -x loadbalancer.sh <ip_master_01> <ip_master_02> <ip_master_03> <ip_node_01>
+sh -x loadbalancer.sh <ip_master_01> <ip_master_02> <ip_master_03> <ip_node_01> <ip_node_02> ...
 ```
 ## Setup Kubernetes
 ssh into the master01 node
