@@ -2,9 +2,8 @@
 This repository contains terraform templates which would spin up infrastructure required for having a multi master kubernetes cluster and scripts needed to setup the cluster. If you are running on-premise you can skip the terraform part and use the scripts to setup the cluster in your environment.
 
 ## Setup the infrastructure
-
-
 Specifications
+
 3 master nodes master01 master02 master03 on 3 DCs for HA
 
 1 worker node node01 on one DC. You may need to add multiple nodes in that case just follow the same steps as the one worker node and the setup should work fine.
