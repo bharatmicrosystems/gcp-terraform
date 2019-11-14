@@ -1,6 +1,7 @@
 ip_master_01=$1
 ip_master_02=$2
 ip_master_03=$3
+project=$4
 curl -o /usr/local/bin/cfssl https://pkg.cfssl.org/R1.2/cfssl_linux-amd64
 curl -o /usr/local/bin/cfssljson https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64
 chmod +x /usr/local/bin/cfssl*
@@ -78,4 +79,4 @@ cat /opt/ssl/etcd-csr.json
 cd /opt/ssl/
 cfssl gencert -initca ca-csr.json | cfssljson -bare ca
 cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes etcd-csr.json | cfssljson -bare etcd
-gsutil cp -r /opt/ssl gs://staging-1144
+gsutil cp -r /opt/ssl gs://staging-${project}

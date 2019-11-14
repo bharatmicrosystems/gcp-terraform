@@ -2,9 +2,10 @@ ip_master_01=$1
 ip_master_02=$2
 ip_master_03=$3
 vip=$4
+project=$5
 mkdir -p /etc/etcd/ssl
 mkdir -p /var/lib/etcd
-gsutil cp -r gs://staging-1144/ssl/*.pem /etc/etcd/ssl/
+gsutil cp -r gs://staging-${project}/ssl/*.pem /etc/etcd/ssl/
 yum install -y wget
 wget https://github.com/coreos/etcd/releases/download/v3.3.4/etcd-v3.3.4-linux-amd64.tar.gz
 tar -zxvf etcd-v3.3.4-linux-amd64.tar.gz
@@ -86,7 +87,7 @@ sed -i "s/ph_ip_master_02/${ip_master_02}/g" /etc/keepalived/keepalived.conf
 sed -i "s/ph_ip_master_03/${ip_master_03}/g" /etc/keepalived/keepalived.conf
 sed -i "s/ph_vip/${vip}/g" /etc/keepalived/keepalived.conf
 systemctl daemon-reload && systemctl enable keepalived && systemctl restart keepalived
-gsutil cp -r gs://staging-1144/pki /etc/kubernetes/
+gsutil cp -r gs://staging-${project}/pki /etc/kubernetes/
 cat <<EOF >  kubeadm-config.yaml
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: InitConfiguration

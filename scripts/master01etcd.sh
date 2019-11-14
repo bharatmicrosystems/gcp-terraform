@@ -2,10 +2,11 @@ ip_master_01=$1
 ip_master_02=$2
 ip_master_03=$3
 vip=$4
+project=$5
 #Do this on all master nodes
 mkdir -p /etc/etcd/ssl
 mkdir -p /var/lib/etcd
-gsutil cp -r gs://staging-1144/ssl/*.pem /etc/etcd/ssl/
+gsutil cp -r gs://staging-${project}/ssl/*.pem /etc/etcd/ssl/
 yum install -y wget
 wget https://github.com/coreos/etcd/releases/download/v3.3.4/etcd-v3.3.4-linux-amd64.tar.gz
 tar -zxvf etcd-v3.3.4-linux-amd64.tar.gz
@@ -121,6 +122,6 @@ sed -i "s/ph_ip_master_02/${ip_master_02}/g" kubeadm-config.yaml
 sed -i "s/ph_ip_master_03/${ip_master_03}/g" kubeadm-config.yaml
 sed -i "s/ph_vip/${vip}/g" kubeadm-config.yaml
 kubeadm init --config kubeadm-config.yaml
-gsutil cp -r /etc/kubernetes/pki gs://staging-1144
+gsutil cp -r /etc/kubernetes/pki gs://staging-${project}
 export kubever=$(kubectl version | base64 | tr -d '\n')
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"
