@@ -40,9 +40,9 @@ module "node01" {
   startup_script = ""
 }
 
-module "nginxlb" {
+module "masterlb" {
   source        = "../../modules/instances"
-  instance_name = "nginxlb"
+  instance_name = "masterlb"
   instance_machine_type = "n1-standard-2"
   instance_zone = "us-central1-a"
   instance_image = "centos-7-v20191014"
