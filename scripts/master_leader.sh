@@ -48,10 +48,11 @@ cat <<EOF >> /etc/hosts
 masterlb_ip masterlb
 EOF
 sed -i "s/masterlb_ip/${LOAD_BALANCER_IP}/g" /etc/hosts
+swapoff -a
 kubeadm init --control-plane-endpoint "masterlb:${LOAD_BALANCER_PORT}" --upload-certs --pod-network-cidr=10.244.0.0/16
 mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
+cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+chown $(id -u):$(id -g) $HOME/.kube/config
 export kubever=$(kubectl version | base64 | tr -d '\n')
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"
 kubectl get nodes
