@@ -141,12 +141,7 @@ sh -x ingress_test.sh <LOAD_BALANCER_IP>
 ```
 You should get an output like the below
 ```
-+ curl --resolve cafe.example.com:443:10.128.0.4 https://cafe.example.com:443/coffee --insecure
-Server address: 10.42.0.2:80
-Server name: coffee-8c8ff9b4f-vrvnr
-Date: 14/Nov/2019:15:43:28 +0000
-URI: /coffee
-Request ID: d0b48224a13c5f9d822e5421306032e9
+
 ```
 Congratulations! You are all setup!
 

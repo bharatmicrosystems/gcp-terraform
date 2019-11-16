@@ -1,6 +1,6 @@
 #Testing the ingress controller
 IC_IP=$1
-IC_HTTP_PORT=443
+IC_HTTP_PORT=80
 if [ "$#" -ne 1 ]; then
   echo "Usage: $0 LOAD_BALANCER_IP" >&2
   exit 1
