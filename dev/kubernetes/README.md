@@ -141,7 +141,8 @@ sh -x ingress_test.sh <LOAD_BALANCER_IP>
 ```
 You should get an output like the below
 ```
-
+apple
+banana
 ```
 Congratulations! You are all setup!
 
