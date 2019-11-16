@@ -188,7 +188,7 @@ subjects:
 ---
 
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment
 metadata:
   name: nginx-ingress-controller
   namespace: ingress-nginx
@@ -196,6 +196,7 @@ metadata:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: ingress-nginx
