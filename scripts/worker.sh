@@ -46,4 +46,5 @@ cat <<EOF >> /etc/hosts
 masterlb_ip masterlb
 EOF
 sed -i "s/masterlb_ip/${LOAD_BALANCER_IP}/g" /etc/hosts
+swapoff -a
 kubeadm join masterlb:6443 --token ${kubetoken} --discovery-token-ca-cert-hash ${kubecacertshash}
