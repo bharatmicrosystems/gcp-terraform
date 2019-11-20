@@ -146,6 +146,55 @@ banana
 ```
 Congratulations! You are all setup!
 
+## Setting up persistent volume mounts
+
+On every node we need to create directories where persistent data can be mounted from containers running on pod. In the next step we will setup replication between the mounts on all servers.
+
+```
+sudo mkdir /mnt/data
+```
+
+You can now create subdirectories within /mnt and mount volumes into the subdirectories from the containers.
+
+# Nginx example with persistent volume volume
+
+We would run an nginx deployment and expose that as a NodePort service. The data would be mounted on one of the volumes '/mnt/nginx_data' as a host path volume.
+
+```
+sudo mkdir /mnt/data
+sudo sh -c "echo 'Hello from Kubernetes storage' > /mnt/data/index.html"
+kubectl apply -f nginx-pv.yaml
+kubectl apply -f nginx-pvc.yaml
+kubectl apply -f nginx.yaml
+curl http://master_ip:nodePort/
+```
+
+## Setting up lsyncd
+
+Running stateful applications within multiple nodes might be an issue as they bind to a PersistentVolume. We are going to use lsyncd in order to sync up the volumes across nodes so that we get High Availability just in case we lose an entire data center
+
+The sync up would be from node01 -> node02 ....-> node0n -> node01
+
+Follow all steps as specified in configure_ssh.sh in order to setup passwordless connectivity between the nodes according to the direction specified above
+
+After that on node01
+```
+sh -x lsyncd.sh <ip_node_02>
+```
+
+On node02
+```
+sh -x lsyncd.sh <ip_node_0n>
+```
+
+On node0n
+```
+sh -x lsyncd.sh <ip_node_01>
+```
+This would ensure that any changes to files on mount of node01 would be replicated on node02 and from node02 to node0n and from node0n to node01.
+
+Make a change to the /mnt/data/index.html and see it replicated across all the nodes and enjoy!
+
 ## Cleaning up
 You might want to destroy the objects at the end especially if you are learning and have the infrastructure temporarily setup. To destroy the terraform objects on your terraform workspace run
 ```
