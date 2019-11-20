@@ -156,13 +156,13 @@ sudo mkdir /mnt/data
 
 You can now create subdirectories within /mnt and mount volumes into the subdirectories from the containers.
 
-# Nginx example with persistent volume volume
+## Nginx example with persistent volume volume
 
 We would run an nginx deployment and expose that as a NodePort service. The data would be mounted on one of the volumes '/mnt/nginx_data' as a host path volume.
 
 ```
 sudo mkdir /mnt/data
-sudo sh -c "echo 'Hello from Kubernetes storage' > /mnt/data/index.html"
+sudo sh -c "echo 'Hello from Kubernetes storage' > /mnt/nginx_data/index.html"
 kubectl apply -f nginx-pv.yaml
 kubectl apply -f nginx-pvc.yaml
 kubectl apply -f nginx.yaml
@@ -193,7 +193,7 @@ sh -x lsyncd.sh <ip_node_01>
 ```
 This would ensure that any changes to files on mount of node01 would be replicated on node02 and from node02 to node0n and from node0n to node01.
 
-Make a change to the /mnt/data/index.html and see it replicated across all the nodes and enjoy!
+Make a change to the /mnt/nginx_data/index.html and see it replicated across all the nodes and enjoy!
 
 ## Cleaning up
 You might want to destroy the objects at the end especially if you are learning and have the infrastructure temporarily setup. To destroy the terraform objects on your terraform workspace run
