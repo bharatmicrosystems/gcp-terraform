@@ -151,7 +151,7 @@ Congratulations! You are all setup!
 On every node we need to create directories where persistent data can be mounted from containers running on pod. In the next step we will setup replication between the mounts on all servers.
 
 ```
-sudo mkdir /mnt/data
+sudo mkdir /mnt
 ```
 
 You can now create subdirectories within /mnt and mount volumes into the subdirectories from the containers.
