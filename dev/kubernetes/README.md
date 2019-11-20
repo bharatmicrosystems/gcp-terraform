@@ -161,7 +161,7 @@ You can now create subdirectories within /mnt and mount volumes into the subdire
 We would run an nginx deployment and expose that as a NodePort service. The data would be mounted on one of the volumes '/mnt/nginx_data' as a host path volume.
 
 ```
-sudo mkdir /mnt/data
+sudo mkdir /mnt/nginx_data
 sudo sh -c "echo 'Hello from Kubernetes storage' > /mnt/nginx_data/index.html"
 kubectl apply -f nginx-pv.yaml
 kubectl apply -f nginx-pvc.yaml
