@@ -163,6 +163,7 @@ We would run an nginx deployment and expose that as a NodePort service. The data
 ```
 sudo mkdir /mnt/nginx_data
 sudo sh -c "echo 'Hello from Kubernetes storage' > /mnt/nginx_data/index.html"
+cd example-stateful-app/
 kubectl apply -f nginx-pv.yaml
 kubectl apply -f nginx-pvc.yaml
 kubectl apply -f nginx.yaml
