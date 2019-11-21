@@ -21,8 +21,8 @@ statusInterval = 10
 
 sync {
 default.rsync,
-source="/mnt",
-target="TARGET_NODE_IP:/mnt",
+source="/kubevolumes",
+target="TARGET_NODE_IP:/kubevolumes",
 delay = 0,
 rsync = {
 compress = true,
