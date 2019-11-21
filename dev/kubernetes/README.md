@@ -167,7 +167,8 @@ cd example-stateful-app/
 kubectl apply -f nginx-pv.yaml
 kubectl apply -f nginx-pvc.yaml
 kubectl apply -f nginx.yaml
-curl http://master_ip:nodePort/
+kubectl apply -f nginx-in.yaml
+curl http://masterlb_ip/nginx
 ```
 
 ## Setting up lsyncd
