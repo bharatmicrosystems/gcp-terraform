@@ -34,9 +34,9 @@ metadata:
   labels:
     app: nginx-svc
 spec:
-  type: NodePort
   ports:
-  - port: 80
+  - port: 5679
+    targetPort: 80
     protocol: TCP
   selector:
     app: nginx
