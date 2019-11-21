@@ -9,6 +9,7 @@ if [ "$#" -lt 4 ]; then
   echo "Usage: $0 ip_master_01 ip_master_02 ip_master_03 ip_node_01 ..." >&2
   exit 1
 fi
+rpm -ivh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
 yum install -y telnet nginx
 cp nginx.conf /etc/nginx/nginx.conf
 sed -i "s/ip_master_01/${ip_master_01}/g" /etc/nginx/nginx.conf

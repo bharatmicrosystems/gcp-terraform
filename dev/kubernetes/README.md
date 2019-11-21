@@ -151,18 +151,18 @@ Congratulations! You are all setup!
 On every node we need to create directories where persistent data can be mounted from containers running on pod. In the next step we will setup replication between the mounts on all servers.
 
 ```
-sudo mkdir /mnt
+sudo mkdir /kubevolumes
 ```
 
 You can now create subdirectories within /mnt and mount volumes into the subdirectories from the containers.
 
 ## Nginx example with persistent volume volume
 
-We would run an nginx deployment and expose that as a NodePort service. The data would be mounted on one of the volumes '/mnt/nginx_data' as a host path volume.
+We would run an nginx deployment and expose that as a NodePort service. The data would be mounted on one of the volumes '/kubevolumes/nginx_data' as a host path volume.
 
 ```
-sudo mkdir /mnt/nginx_data
-sudo sh -c "echo 'Hello from Kubernetes storage' > /mnt/nginx_data/index.html"
+sudo mkdir /kubevolumes/nginx_data
+sudo sh -c "echo 'Hello from Kubernetes storage' > /kubevolumes/nginx_data/index.html"
 cd example-stateful-app/
 kubectl apply -f nginx-pv.yaml
 kubectl apply -f nginx-pvc.yaml
