@@ -4,7 +4,7 @@ if [ "$#" -ne 1 ]; then
   echo "Usage: $0 TARGET_NODE_IP" >&2
   exit 1
 fi
-rpm -iUvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+yum -y install epel-release
 yum -y install lua lua-devel pkgconfig gcc asciidoc
 yum install -y lsyncd
 systemctl start lsyncd
