@@ -171,9 +171,9 @@ kubectl apply -f nginx-in.yaml
 curl http://masterlb_ip/nginx
 ```
 
-## Setting up lsyncd
+## Setting up unison
 
-Running stateful applications within multiple nodes might be an issue as they bind to a PersistentVolume. We are going to use lsyncd in order to sync up the volumes across nodes so that we get High Availability just in case we lose an entire data center
+Running stateful applications within multiple nodes might be an issue as they bind to a PersistentVolume. We are going to use unison in order to sync up the volumes across nodes so that we get High Availability just in case we lose an entire data center
 
 The sync up would be from node01 -> node02 ....-> node0n -> node01
 
@@ -181,17 +181,17 @@ Follow all steps as specified in configure_ssh.sh in order to setup passwordless
 
 After that on node01
 ```
-sh -x lsyncd.sh <ip_node_02>
+sh -x unison_source.sh <ip_node_02>
 ```
 
 On node02
 ```
-sh -x lsyncd.sh <ip_node_0n>
+sh -x unison_source.sh <ip_node_0n>
 ```
 
 On node0n
 ```
-sh -x lsyncd.sh <ip_node_01>
+sh -x unison_target.sh
 ```
 This would ensure that any changes to files on mount of node01 would be replicated on node02 and from node02 to node0n and from node0n to node01.
 
