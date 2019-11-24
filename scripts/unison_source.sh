@@ -11,7 +11,11 @@ cat <<EOF >  /root/.unison/default.prf
 #
 repeat = watch
 root = /kubevolumes/
-root = ssh://root@TARGET_NODE_IP//kubevolumes/
+root = ssh://root@TARGET_NODE_IP//kubevolumes/root@TARGET_NODE_IP
+group=true
+owner=true
+prefer=newer
+times=true  
 EOF
 sed -i "s/TARGET_NODE_IP/${targetNodeIp}/g" /root/.unison/default.prf
 cd ~
