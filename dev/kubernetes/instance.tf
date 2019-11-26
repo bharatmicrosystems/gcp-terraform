@@ -8,7 +8,7 @@ module "master01" {
   external_enabled = "true"
   startup_script = ""
 }
-/*module "master02" {
+module "master02" {
   source        = "../../modules/instances"
   instance_name = "master02"
   instance_machine_type = "n1-standard-2"
@@ -27,7 +27,7 @@ module "master03" {
   subnet_name = "default"
   external_enabled = "true"
   startup_script = ""
-}*/
+}
 
 module "node01" {
   source        = "../../modules/instances"
@@ -51,13 +51,13 @@ module "node02" {
   startup_script = ""
 }
 
-/*module "masterlb" {
+module "masterlb" {
   source        = "../../modules/instances"
   instance_name = "masterlb"
-  instance_machine_type = "n1-standard-2"
+  instance_machine_type = "n1-standard-1"
   instance_zone = "us-central1-a"
   instance_image = "centos-7-v20191014"
   subnet_name = "default"
   external_enabled = "true"
   startup_script = ""
-}*/
+}
