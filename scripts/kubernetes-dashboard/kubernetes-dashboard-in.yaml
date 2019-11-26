@@ -9,7 +9,7 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
 spec:
   rules:
-  - host: kubedashboard.etp.royalmailgroup.net
+  - host: DASHBOARD_DOMAIN
     http:
       paths:
         - path: /

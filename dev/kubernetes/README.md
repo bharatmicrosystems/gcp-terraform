@@ -197,6 +197,21 @@ This would ensure that any changes to files on mount of node01 would be replicat
 
 Make a change to the /mnt/nginx_data/index.html and see it replicated across all the nodes and enjoy!
 
+##Setting up Kubernetes Dashboard
+
+On master run
+```
+cd gcp-terraform\scripts\kubernetes-dashboard
+sh -x setup.sh DASHBOARD_DOMAIN
+```
+The setup script is going to generate certificate, key and csr of the supplied DASHBOARD_DOMAIN and would create a kubernetes secret file with them. The secret file would then be applied to the dashboard so that they run using the provided cert and key pairs. You can choose to edit the setup.sh file and add your own certs in the secret.
+
+The script then creates a cluster role with the name admin and applies a ClusterRoleBinding to it with cluster-admin privileges. You may wish to control the permissions granually and allow only the required accesses.
+
+This would also expose the kubernetes dashboard on the ingress controller using the provided domain.
+
+The dashboard would be accessible on https://DASHBOARD_DOMAIN if everything runs smoothly.
+
 ## Cleaning up
 You might want to destroy the objects at the end especially if you are learning and have the infrastructure temporarily setup. To destroy the terraform objects on your terraform workspace run
 ```
