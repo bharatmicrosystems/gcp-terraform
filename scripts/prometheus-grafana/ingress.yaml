@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: prometheus-grafana-ingress
+  namespace: monitoring
+  annotations:
+    #nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/add-base-url: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+spec:
+  rules:
+  - host: prometheus.localhost
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: prometheus
+            servicePort: 9090
+  - host: grafana.localhost
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: grafana
+            servicePort: 3000

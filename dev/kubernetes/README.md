@@ -212,6 +212,49 @@ This would also expose the kubernetes dashboard on the ingress controller using 
 
 The dashboard would be accessible on https://DASHBOARD_DOMAIN if everything runs smoothly.
 
+##Setting up metrics server
+Metrics server is necessary for the horizonal pod autoscaler and prometheus to work. The following are the steps to install the metrics server
+
+
+Edit config map to make hostfile entries of all your nodes
+```
+kubectl edit configmap coredns -n kube-system
+```
+```
+       errors
+       health
+       hosts {
+         x.x.x.x master01
+         x.x.x.x master02
+         x.x.x.x node01
+         x.x.x.x node02
+         x.x.x.x node03
+         fallthrough
+       }
+       ready
+       kubernetes cluster.local in-addr.arpa ip6.arpa {
+
+```
+
+Install the metrics server
+```
+kubectl apply -f scripts/metrics-server/deploy/1.8+/
+kubectl top nodes
+```
+
+##Install prometheus and grafana
+prometheus and grafana are popular open source monitoring and alerting solution and can be used to monitor the kubernetes cluster.
+
+```
+kubectl create ns monitoring
+kubectl apply -f scripts/prometheus-grafana/grafana-pv.yaml
+kubectl apply -f scripts/prometheus-grafana/grafana-pvc.yaml
+kubectl apply -f scripts/prometheus-grafana/manifests-all.yaml
+kubectl apply -f scripts/prometheus-grafana/ingress.yaml
+```
+You can now access prometheus on prometheus.localhost and grafana on grafana.localhost
+Login on grafana using the default admin/admin creds
+
 ## Cleaning up
 You might want to destroy the objects at the end especially if you are learning and have the infrastructure temporarily setup. To destroy the terraform objects on your terraform workspace run
 ```
